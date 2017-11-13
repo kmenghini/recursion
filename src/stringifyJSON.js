@@ -2,32 +2,34 @@
 // var stringifyJSON = JSON.stringify;
 
 // but you don't so you're going to write it from scratch:
-//var stringOutput = '';
-
 var stringifyJSON = function(obj) {
-  // move from outside data type to inside
-  //update input for next iteration
-  //add strigified part to output
-  //if it's a number
+  var output = '';
+
   if (typeof obj === 'number' || typeof obj === 'boolean') {
-  	return obj.toString();
+  	return output += obj.toString();
+
   } else if (typeof obj === 'string') {
-  	return obj;
+  	return output += '\"' + obj + '\"';
+
   } else if (obj === null) {
-  	return 'null';
+  	return output += 'null';
+
   } else if (Array.isArray(obj)) {
-  	return '[' + obj + ']';
-  	//loop through each element into Stringify JSON
+  	for (var i = 0; i < obj.length; i++) {
+  		output += stringifyJSON(obj[i]) + ',';
+  	}
+  	return '[' + output.slice(0, -1) + ']'; 
+
   } else if (typeof obj === 'object') {
-  	return '{' + obj + '}';
-  	//loop
+    for (var key in obj) {
+      if (key !== 'functions' && key !== 'undefined'){
+      	output += stringifyJSON(key) + ':' + stringifyJSON(obj[key]) + ',';
+      }
+    }
+  	return '{' + output.slice(0, -1) + '}';
+
   } else if (typeof obj === 'function' || typeof obj === 'undefined') {
-  	return;
-  }
+  	return output;
+  }	
   
-  //also cases for function, undefined, and symbol
-  // while(){
-  // 	stringifyJSON(obj);		
-  // }		
-  //return string;	 	
 };
