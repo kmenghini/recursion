@@ -5,21 +5,16 @@
 
 // But instead we're going to implement it from scratch:
 
-  //initalize array to add to
-var elementsInClass = [];
-
-var getElementsByClassName = function(className
-) {
-  //initialize current node to document.body
-  var currentNode = document.body;
-  //loop into each node
-  if (currentNode.classList.contains(className)) {
-  	elementsInClass.push(currentNode);
-  	//loop through each child node and send through recursive func ***
-  	getElementsByClassName(currentNode.childNodes);
+var getElementsByClassName = function(className, currentNode) {
+  var elementsInClass = [];
+  currentNode = currentNode || document.body;
+  if (currentNode.classList && currentNode.classList.contains(className)) {
+    elementsInClass.push(currentNode);
   }
-  //if the classList inclues the className
-  	//push the element to the array
-  	//go into next childNode
+  if (currentNode.childNodes) {
+    for (var i = 0; i < currentNode.childNodes.length; i++) {
+      elementsInClass = elementsInClass.concat(getElementsByClassName(className, currentNode.childNodes[i]));
+    } 
+  } 
   return elementsInClass;
 };
